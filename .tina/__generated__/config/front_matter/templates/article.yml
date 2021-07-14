@@ -1,0 +1,7 @@
+---
+label: Article
+name: article
+fields:
+  - type: text
+    label: Title
+    name: title
