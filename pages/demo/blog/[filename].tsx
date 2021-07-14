@@ -1,7 +1,6 @@
 
-import { LocalClient, EditProvider } from "tina-graphql-gateway";
+import { LocalClient } from "tina-graphql-gateway";
 import type { Posts_Document } from "../../../.tina/__generated__/types";
-import TinaWrapper from "../../../components/tina-wrapper";
 
 export type AsyncReturnType<T extends (...args: any) => Promise<any>> =
   T extends (...args: any) => Promise<infer R> ? R : any;
@@ -59,7 +58,7 @@ export const getStaticProps = async ({ params }) => {
  * posts and provide their "filename" as part of the URL path
  *
  * So a blog post at "content/posts/hello.md" would
- * be viewable at http://localhost:3000/posts/hello
+ * be viewable at http://localhost:3000/demo/blog/hello
  */
 export const getStaticPaths = async () => {
   const postsListData = await client.request<{
