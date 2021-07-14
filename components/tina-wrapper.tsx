@@ -3,7 +3,7 @@ import { TinaCloudProvider, useGraphqlForms } from "tina-graphql-gateway";
 import { useMemo } from "react";
 import { TinaCMS } from "tinacms";
 import { LocalClient } from "tina-graphql-gateway";
-// import { MarkdownFieldPlugin } from "react-tinacms-editor";
+import { MarkdownFieldPlugin } from "react-tinacms-editor";
 
 const TinaWrapper = (props) => {
   const cms = useMemo(() => {
@@ -11,7 +11,7 @@ const TinaWrapper = (props) => {
       apis: {
         tina: new LocalClient(),
       },
-      // plugins: [MarkdownFieldPlugin],
+      plugins: [MarkdownFieldPlugin],
       enabled: true,
     });
   }, []);
