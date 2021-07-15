@@ -2,14 +2,33 @@
 import { TinaCloudProvider, useGraphqlForms } from "tina-graphql-gateway";
 import { useMemo } from "react";
 import { TinaCMS } from "tinacms";
-import { LocalClient } from "tina-graphql-gateway";
+import { Client, LocalClient } from "tina-graphql-gateway";
 import { MarkdownFieldPlugin } from "react-tinacms-editor";
+
+export const createClient = () => {
+  return process.env.NEXT_PUBLIC_USE_LOCAL_CLIENT === "1"
+    ? createLocalClient()
+    : createCloudClient();
+};
+
+export const createCloudClient = () => {
+  return new Client({
+    organizationId: process.env.NEXT_PUBLIC_ORGANIZATION_NAME,
+    clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
+    branch: process.env.NEXT_PUBLIC_EDIT_BRACH,
+    tokenStorage: "LOCAL_STORAGE",
+  });
+};
+
+export const createLocalClient = () => {
+  return new LocalClient();
+};
 
 const TinaWrapper = (props) => {
   const cms = useMemo(() => {
     return new TinaCMS({
       apis: {
-        tina: new LocalClient(),
+        tina: createClient(),
       },
       plugins: [MarkdownFieldPlugin],
       enabled: true,
