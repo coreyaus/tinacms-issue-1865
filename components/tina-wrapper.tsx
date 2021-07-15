@@ -13,6 +13,7 @@ const TinaWrapper = (props) => {
       },
       plugins: [MarkdownFieldPlugin],
       enabled: true,
+      sidebar: true,
     });
   }, []);
 
@@ -31,10 +32,37 @@ const TinaWrapper = (props) => {
   );
 };
 
+// NOTE: the recursive calls to configureFields are not needed in this
+// test case but make it easy to apply the markdown editor to textarea
+// fields that are nested within field group or block components.
+const configureFields = (fields) => {
+  fields?.forEach((field) => {
+    // Iterate through all fields in a field group component
+    if (field.fields) {
+      configureFields(field.fields);
+    }
+
+    // Iterate through all fields in block components
+    if (field.templates) {
+      Object.keys(field.templates).forEach((template) => {
+        configureFields(field.templates[template].fields);
+      });
+    }
+
+    if (field.name == "_body" || field.name == "content") {
+      field.component = "markdown";
+    }
+  });
+};
+
 const Inner = (props) => {
   const [payload, isLoading] = useGraphqlForms({
     query: (gql) => gql(props.query),
     variables: props.variables || {},
+    formify: ({ createForm, formConfig, skip }) => {
+      configureFields(formConfig.fields);
+      return createForm(formConfig);
+    },
   });
   return (
     <>
