@@ -129,4 +129,8 @@ input Article_Doc_Input {
   _body: String
 }
 
+schema {
+  query: Query
+  mutation: Mutation
+}
   
